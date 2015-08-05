@@ -3,7 +3,8 @@
 
 # Install Mesosphere Mesos package
 - name: Install mesos package
-  apt: pkg={{item}} state=present update_cache=yes
+  #apt: pkg={{item}} state=present update_cache=yes
+  apt: pkg={{item}} state=present
   with_items:
     - mesos={{ mesos_pkg_version }}
   sudo: yes
@@ -94,3 +95,23 @@
   notify:
     - Start mesos-slave
   when: mesos_install_mode == "slave" or mesos_install_mode == "master-slave"
+
+# mesos-docker
+- name: Set Mesos Slave using Docker
+  copy:
+    content: "docker,mesos"
+    dest: /etc/mesos-slave/containerizers
+    mode: 0644
+  sudo: yes
+  when: mesos_install_mode == "slave" or mesos_install_mode == "master-slave"
+
+- name: Set Mesos Slave using Docker increase timeout
+  copy:
+    content: "5mins"
+    dest: /etc/mesos-slave/executor_registration_timeout
+    mode: 0644
+  sudo: yes
+  notify:
+    - Restart mesos-slave
+  when: mesos_install_mode == "slave" or mesos_install_mode == "master-slave"
+
