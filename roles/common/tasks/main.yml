@@ -18,3 +18,10 @@
     dest: /etc/apt/sources.list.d/mesosphere.list
     mode: 0644
   sudo: yes
+
+- name: Add apt proxy
+  copy:
+    content: 'Acquire::http::Proxy "http://{{ apt_proxy_ip }}:{{ apt_proxy_port }}/";'
+    dest: /etc/apt/apt.conf.d/01proxy
+    mode: 0644
+  sudo: yes
