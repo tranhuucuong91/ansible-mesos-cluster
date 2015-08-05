@@ -6,13 +6,7 @@
 # RUN only mesos-slave: ansible-playbook --ask-sudo-pass -i hosts site.yml --tags "common,mesos-master"
 # RUN only marathon: ansible-playbook --ask-sudo-pass -i hosts site.yml --tags "common,marathon"
 
-# all hosts
-- name: run common tasks for all mesos cluster nodes
-  hosts: all
-  sudo: True
-
-  roles:
-    - { role: common, tags: ["common"] }
+- include: common.yml
 
 # hosts in the zookeeper group
 - name: deploy and configure the zookeeper hosts
@@ -22,15 +16,16 @@
   roles:
     - { role: zookeeper, zookeeper_action: "install", tags: ["zookeeper"] }
 
-# hosts in both the mesos_master and marathon groups
+# hosts in both the mesos_masters and mesos_slaves groups
 - name: deploy and configure mesos and slave hosts
   hosts: mesos_masters:&mesos_slaves
   sudo: True
 
   roles:
     - { role: mesos, mesos_install_mode: "master-slave", tags: ["mesos-master", "mesos-slave"] }
+    - { role: docker, tags: ["docker"] }
 
-# hosts in only the mesos_master group
+# hosts in only the mesos_masters group
 - name: deploy and configure the mesos master-only hosts
   hosts: mesos_masters:!mesos_slaves
   sudo: True
@@ -38,15 +33,16 @@
   roles:
     - { role: mesos, mesos_install_mode: "master", tags: ["mesos-master"] }
 
-# hosts in only the mesos_slave group
+# hosts in only the mesos_slaves group
 - name: deploy and configure the mesos slave-only hosts
   hosts: mesos_slaves:!mesos_masters
   sudo: True
 
   roles:
     - { role: mesos, mesos_install_mode: "slave", tags: ["mesos-slave"] }
+    - { role: docker, tags: ["docker"] }
 
-  # hosts in both the mesos_master and marathon groups
+  # hosts in both the mesos_masters and marathon groups
 - name: deploy and configure mesos and marathon hosts
   hosts: marathon:&mesos_masters
   sudo: True
@@ -83,3 +79,4 @@
 
   roles:
     - { role: zookeeper, zookeeper_action: "remove", tags: ["zookeeper"] }
+

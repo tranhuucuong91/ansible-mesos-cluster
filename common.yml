@@ -1,0 +1,8 @@
+---
+# all hosts
+- name: run common tasks for all mesos cluster nodes
+  hosts: all
+  sudo: True
+
+  roles:
+    - { role: common, tags: ["common"] }
