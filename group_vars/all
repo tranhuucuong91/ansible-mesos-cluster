@@ -2,14 +2,22 @@
 # Variables here are applicable to all host groups
 
 # Select the Mesos package version install:
-mesos_pkg_version: 0.20.0-1.0.ubuntu1404
+#mesos_pkg_version: 0.20.0-1.0.ubuntu1404
+mesos_pkg_version: 0.23.0-1.0.ubuntu1404
 
 # Choose whether to install Marathon using a Mesosphere package or from GitHub source
 marathon_install_type: "package" # valid options are "package" or "source"
-marathon_pkg_version: 0.6.1-1.1 # if install type is "package" which version to use
+#marathon_pkg_version: 0.6.1-1.1 # if install type is "package" which version to use
+marathon_pkg_version: 0.9.0-1.0.381.ubuntu1404 # if install type is "package" which version to use
 
 mesos_local_address: "{{ansible_eth0.ipv4.address}}"
-mesos_cluster_name: "Cluster01"
+#mesos_cluster_name: "Cluster01"
+mesos_cluster_name: "olbius-mesos01"
 zookeeper_client_port: "2181"
 zookeeper_url: "zk://{{ groups.zookeepers | join(':' + zookeeper_client_port + ',') }}:{{ zookeeper_client_port }}"
 sbt_version: "sbt-0.13.5.deb"
+
+
+apt_proxy_ip: "192.168.0.11"
+apt_proxy_port: "3142"
+
