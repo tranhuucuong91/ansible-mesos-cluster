@@ -1,0 +1,23 @@
+---
+- include: Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- include: RedHat.yml
+  when: ansible_os_family == "RedHat"
+
+# config private docker registry
+- name: Add hosts private docker registry
+  lineinfile:
+      dest: /etc/hosts
+      regexp: "registry.olbius.lan"
+      line: "192.168.0.11 registry.olbius.lan"
+
+- name: Create docker certs directory
+  file: path=/etc/docker/certs.d/registry.olbius.lan:5000  state=directory
+
+- name: Instruct docker to trust private docker registry
+  template: src=registry.olbius.lan.crt dest=/etc/docker/certs.d/registry.olbius.lan:5000/ca.crt
+  sudo: yes
+  notify:
+    - Restart docker
+

@@ -1,0 +1,9 @@
+---
+# handlers file for docker
+- name: Start docker
+  shell: start docker
+  sudo: yes
+
+- name: Restart docker
+  shell: restart docker
+  sudo: yes
