@@ -1,7 +1,8 @@
 ---
 # tasks file for zookeeper
 - name: Install zookeeper packages
-  apt: pkg={{item}} state=present update_cache=yes
+  #apt: pkg={{item}} state=present update_cache=yes
+  apt: pkg={{item}} state=present
   with_items:
     - zookeeper
     - zookeeper-bin

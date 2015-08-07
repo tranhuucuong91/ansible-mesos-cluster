@@ -1,14 +1,16 @@
 ---
 # tasks for install marathon from Mesosphere package
 - name: Install marathon package without mesos package
-  apt: pkg={{item}} state=present update_cache=yes
+  #apt: pkg={{item}} state=present update_cache=yes
+  apt: pkg={{item}} state=present
   with_items:
     - marathon={{ marathon_pkg_version }}
   sudo: yes
   when: marathon_install_type == "package" and marathon_only == False
 
 - name: Install marathon and mesos packages
-  apt: pkg={{item}} state=present update_cache=yes
+  #apt: pkg={{item}} state=present update_cache=yes
+  apt: pkg={{item}} state=present
   with_items:
     - mesos={{ mesos_pkg_version }}
     - marathon={{ marathon_pkg_version }}
@@ -53,14 +55,16 @@
 
 # tasks to build and install marathon from source
 - name: Install mesos packages
-  apt: pkg={{item}} state=present update_cache=yes
+  #apt: pkg={{item}} state=present update_cache=yes
+  apt: pkg={{item}} state=present
   with_items:
     - mesos={{ mesos_pkg_version }}
   sudo: yes
   when: marathon_install_type == "source" and marathon_only == True
 
 - name: Install Open JDK 7 and Git
-  apt: pkg={{item}} state=present update_cache=yes
+  #apt: pkg={{item}} state=present update_cache=yes
+  apt: pkg={{item}} state=present
   with_items:
     - openjdk-7-jdk
     - git
